@@ -1,4 +1,5 @@
 import MessagesList from 'MessagesList'
+import NewMessageForm from 'NewMessageForm'
 
 export default class Application extends React.Component {
   constructor (props) {
@@ -31,11 +32,11 @@ export default class Application extends React.Component {
     return (
       <div>
         <MessagesList messages={messages} />
-
-        <form onSubmit={this.handleMessageFormSubmit}>
-          <input type='text' value={message} onChange={this.handleMessageInputChange} />
-          <button type='submit'>Send</button>
-        </form>
+        <NewMessageForm
+          message={message}
+          onChange={this.handleMessageInputChange}
+          onSubmit={this.handleMessageFormSubmit}
+        />
       </div>
     )
   }
