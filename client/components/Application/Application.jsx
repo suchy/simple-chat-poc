@@ -1,6 +1,7 @@
 import MessagesList from 'MessagesList'
 import NewMessageForm from 'NewMessageForm'
-import { commandExist, executeCommand, isCommand } from 'helpers/commands'
+import { executeCommand, isCommand } from 'helpers/commands'
+import './Application.sass'
 
 export default class Application extends React.Component {
   constructor (props) {
@@ -37,7 +38,7 @@ export default class Application extends React.Component {
   render () {
     const { message, messages } = this.state
     return (
-      <div>
+      <div className='chat'>
         <MessagesList messages={messages} />
         <NewMessageForm
           message={message}
