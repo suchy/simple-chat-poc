@@ -1,0 +1,11 @@
+# Public, build folder
+./public
+
+# Dependency directories
+node_modules/
+
+# Optional npm cache directory
+.npm
+
+# macOs storage files
+*.DS_Store
