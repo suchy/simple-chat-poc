@@ -1,5 +1,6 @@
 import MessagesList from 'MessagesList'
 import NewMessageForm from 'NewMessageForm'
+import { commandExist, executeCommand, isCommand } from 'helpers/commands'
 
 export default class Application extends React.Component {
   constructor (props) {
@@ -21,10 +22,16 @@ export default class Application extends React.Component {
   handleMessageFormSubmit (e) {
     e.preventDefault()
 
-    this.setState({
-      messages: [...this.state.messages, this.state.message],
-      message: ''
-    })
+    const { message, messages } = this.state
+    const newState = { message: '' }
+
+    if (isCommand(message)) {
+      executeCommand(message)
+    } else {
+      newState.messages = [...messages, message]
+    }
+
+    this.setState(newState)
   }
 
   render () {
