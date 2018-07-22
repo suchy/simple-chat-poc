@@ -12,7 +12,8 @@ export default class Application extends React.Component {
     this.state = {
       message: '',
       messages: [],
-      nick: 'Suchy',
+      nick: window.localStorage.getItem('nick'),
+      identifier: window.localStorage.getItem('identifier'),
       othersNick: 'Ewa'
     }
 
@@ -43,20 +44,20 @@ export default class Application extends React.Component {
   handleMessageFormSubmit (e) {
     e.preventDefault()
 
-    const { message, nick } = this.state
-    const newMessage = { author: nick, content: message, type: 'message' }
+    const { message, identifier } = this.state
+    const newMessage = { author: identifier, content: message, type: 'message' }
     // isCommand(message) ? executeCommand(message) : this.addMessage(newMessage)
     this.socket.emit('message', newMessage)
     this.setState({ message: '' })
   }
 
   render () {
-    const { message, messages, nick, othersNick } = this.state
+    const { message, messages, identifier, nick, othersNick } = this.state
 
     return (
       <div className='chat'>
         <Header nick={othersNick} />
-        <MessagesList messages={messages} />
+        <MessagesList messages={messages} identifier={identifier} />
         <NewMessageForm
           message={message}
           nick={nick}
