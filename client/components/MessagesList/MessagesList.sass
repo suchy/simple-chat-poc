@@ -16,11 +16,36 @@
 
 .messages_list-item_body
   display: inline-block
+  max-width: 60%
   padding: 8px 16px
   border-radius: 12px
+  position: relative
+
+  &::after
+    content: ''
+    width: 0
+    height: 0
+    position: absolute
+    top: 50%
+    transform: translate(0, -50%)
+    border-top: 6px solid transparent
+    border-bottom: 6px solid transparent
 
   .is-self &
     background: green
 
+    &::after
+      right: -6px
+      border-left: 6px solid green
+
+
   .is-others &
     background: grey
+
+    &::after
+      left: -6px
+      border-right: 6px solid grey
+
+  .is-highlighted &
+    font-size: 18px
+    background: darken(red, 10%)

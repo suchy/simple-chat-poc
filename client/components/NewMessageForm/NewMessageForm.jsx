@@ -1,10 +1,12 @@
 import './NewMessageForm.sass'
 
-const NewMessageForm = ({ message, onChange, onSubmit }) => (
+const NewMessageForm = ({ message, nick, onChange, onSubmit }) => (
   <form onSubmit={onSubmit} className='messages_form'>
+    <label htmlFor='new_message'>{nick}:</label>
     <input
       autoFocus
       className='messages_form-input'
+      id='new_message'
       onChange={onChange}
       type='text'
       value={message}
