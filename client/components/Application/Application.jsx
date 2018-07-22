@@ -29,15 +29,12 @@ export default class Application extends React.Component {
     this.socket.on('message', this.handleIncomingMessage)
   }
 
-  addMessage (message) {
-    this.setState({ messages: [...this.state.messages, message] })
-  }
-
   handleIncomingMessage (message) {
     if (!message || !message.type) return false;
 
     ['highlight', 'message', 'think'].includes(message.type) && this.addMessage(message)
     message.type === 'oops' && this.removeAuthorLastMessage(message.author)
+    message.type === 'fadelast' && this.fadeOut()
   }
 
   handleMessageInputChange (e) {
@@ -58,6 +55,20 @@ export default class Application extends React.Component {
 
     this.socket.emit('message', newMessage)
     this.setState({ message: '' })
+  }
+
+  addMessage (message) {
+    this.setState({ messages: [...this.state.messages, message] })
+  }
+
+  fadeOut () {
+    const { messages } = this.state
+
+    if (messages.length > 0) {
+      messages[messages.length - 1].type = 'fadelast'
+    }
+
+    this.setState({ messages })
   }
 
   removeAuthorLastMessage (identifier) {
