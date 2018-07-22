@@ -22,7 +22,14 @@ module.exports = {
     hot: true,
     open: true,
     overlay: true,
-    port: process.env.PORT || 3000
+    port: process.env.PORT || 3000,
+    proxy: {
+      '/socket.io': {
+        target: 'http://localhost:4000',
+        secure: true,
+        changeOrigin: true
+      }
+    }
   },
 
   module: {
