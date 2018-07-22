@@ -42,7 +42,11 @@ module.exports = {
         }, {
           loader: 'css-loader'
         }, {
-          loader: 'sass-loader'
+          loader: 'sass-loader',
+          options: {
+            data: '@import "variables"',
+            includePaths: [path.resolve(__dirname, '..', 'client', 'helpers')]
+          }
         }]
       },
 

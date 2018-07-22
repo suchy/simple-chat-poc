@@ -1,0 +1,63 @@
+.message
+  display: block
+  margin-bottom: $unit
+
+  &.is-self
+    text-align: right
+
+  &.is-others
+    text-align: left
+
+.message-body
+  display: inline-block
+  max-width: 60%
+  padding: ($unit / 2) $unit
+  border-radius: $unit * .75
+  position: relative
+  transition: opacity .75s ease
+
+  &::after
+    content: ''
+    width: 0
+    height: 0
+    position: absolute
+    top: 50%
+    transform: translate(0, -50%)
+    border-top: ($unit / 2) solid transparent
+    border-bottom: ($unit / 2) solid transparent
+
+  .is-self &
+    background: $green
+
+    &::after
+      right: - ($unit / 2)
+      border-left: ($unit / 2) solid $green
+
+
+  .is-others &
+    background: $greyLight
+
+    &::after
+      left: - ($unit / 2)
+      border-right: ($unit / 2) solid $greyLight
+
+  .is-highlight &
+    font-size: $unit * 1.1
+
+  .is-self.is-highlight &
+    background: $darkGreen
+
+    &::after
+      border-left-color: $darkGreen
+
+  .is-others.is-highlight &
+    background: $darkGrey
+
+    &::after
+      border-right-color: $darkGrey
+
+  .is-think &
+    color: $blackLight
+
+  .is-fadelast &
+    opacity: .1

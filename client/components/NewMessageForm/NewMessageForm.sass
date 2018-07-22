@@ -1,19 +1,45 @@
 .messages_form
   display: flex
-  height: 80px
-  padding: 16px
+  height: $unit * 5
+  padding: $unit
   flex-grow: 0
   flex-shrink: 0
 
 .messages_form-input
   height: 100%
-  padding: 16px
-  border-top: solid 1px #ccc
+  padding: $unit
+  border: solid 1px $grey
+  border-right: 0
+  border-radius: ($unit / 2) 0 0 ($unit / 2)
   flex-grow: 1
   flex-shrink: 1
+  font-size: $unit
+  line-height: $unit
+
+  &::placeholder
+    color: $grey
 
 .messages_form-button
-  width: 100px
+  width: $unit * 3
+  position: relative
+  border: solid 1px $grey
+  border-left: 0
+  border-radius: 0 ($unit / 2) ($unit / 2) 0
+  font-size: $unit * 1.25
+  font-weight: 600
+  color: $grey
+  background: transparent
   text-align: center
-  background: blue
   cursor: pointer
+
+  &::before
+    content: ''
+    width: 1px
+    position: absolute
+    top: $unit / 2
+    left: 0
+    bottom: $unit / 2
+    background: $grey
+
+  &:hover
+    color: $darkGrey

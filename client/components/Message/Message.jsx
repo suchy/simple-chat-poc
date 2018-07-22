@@ -1,13 +1,15 @@
+import './Message.sass'
+
 const Message = ({ author, content, currentUser, timestamp, type }) => {
   const classNames = [
-    'messages_list-item',
+    'message',
     author === currentUser ? 'is-self' : 'is-others',
     type !== 'message' ? `is-${type}` : ''
   ]
 
   return (
     <li className={classNames.join(' ')} title={timestamp}>
-      <span className='messages_list-item_body'>{content}</span>
+      <span className='message-body'>{content}</span>
     </li>
   )
 }
