@@ -1,6 +1,7 @@
+import Header from 'Header'
 import MessagesList from 'MessagesList'
 import NewMessageForm from 'NewMessageForm'
-import Header from 'Header'
+import Indicator from 'Indicator'
 import { getCommand } from 'helpers/commands'
 import socketIoClient from 'socket.io-client/dist/socket.io'
 import './Application.sass'
@@ -16,12 +17,14 @@ export default class Application extends React.Component {
       messages: [],
       nick: window.localStorage.getItem('nick'),
       identifier: window.localStorage.getItem('identifier'),
+      isWriting: false,
       othersNick: 'Ewa'
     }
 
     this.handleMessageInputChange = this.handleMessageInputChange.bind(this)
     this.handleMessageFormSubmit = this.handleMessageFormSubmit.bind(this)
     this.handleIncomingMessage = this.handleIncomingMessage.bind(this)
+    this.handleWritingIndicator = this.handleWritingIndicator.bind(this)
     this.addMessage = this.addMessage.bind(this)
 
     this.socket = socketIoClient('/')
@@ -29,6 +32,12 @@ export default class Application extends React.Component {
 
   componentDidMount () {
     this.socket.on('message', this.handleIncomingMessage)
+    this.socket.on('isWriting', this.handleWritingIndicator)
+  }
+
+  componentDidUpdate (prevProps, prevState) {
+    const { identifier, message } = this.state
+    !!prevState.message !== !!message && this.socket.emit('isWriting', { identifier, isWriting: !!message })
   }
 
   handleIncomingMessage (message) {
@@ -60,6 +69,11 @@ export default class Application extends React.Component {
     this.setState({ message: '' })
   }
 
+  handleWritingIndicator (e) {
+    const { identifier, isWriting } = this.state
+    e.identifier !== identifier && e.isWriting !== isWriting && this.setState({ isWriting: e.isWriting })
+  }
+
   addMessage (message) {
     this.setState({ messages: [...this.state.messages, message] })
   }
@@ -78,7 +92,6 @@ export default class Application extends React.Component {
     let count = time
 
     const countdown = setInterval(() => {
-
       const newMessage = { ...message, type: 'message', content: count.toString(), timestamp: getTimestamp() }
 
       if (count === 0) {
@@ -116,12 +129,16 @@ export default class Application extends React.Component {
   }
 
   render () {
-    const { message, messages, identifier, nick, othersNick } = this.state
+    const { message, messages, identifier, nick, othersNick, isWriting } = this.state
 
     return (
       <div className='chat'>
         <Header nick={othersNick} />
+
         <MessagesList messages={messages} identifier={identifier} />
+
+        <Indicator isWriting={isWriting} />
+
         <NewMessageForm
           message={message}
           nick={nick}

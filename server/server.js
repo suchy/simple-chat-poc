@@ -15,4 +15,5 @@ const getTimestamp = () => (new Date()).getTime().toString()
 
 io.on('connection', (socket) => {
   socket.on('message', (message) => io.sockets.emit('message', { ...message, timestamp: getTimestamp() }))
+  socket.on('isWriting', (event) => io.sockets.emit('isWriting', event))
 })
