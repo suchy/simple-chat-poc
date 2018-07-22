@@ -11,11 +11,8 @@ server.listen(4000, () => console.log('Chat server app listening on port 4000!')
 
 const io = socketIo(server)
 
-io.on('connection', (socket) => {
-  console.log('connetcted')
+const getTimestamp = () => (new Date()).getTime().toString()
 
-  socket.on('message', (message) => {
-    const newMessage = {...message, timestamp: (new Date()).getTime().toString() }
-    io.sockets.emit('message', newMessage)
-  })
+io.on('connection', (socket) => {
+  socket.on('message', (message) => io.sockets.emit('message', { ...message, timestamp: getTimestamp() }))
 })

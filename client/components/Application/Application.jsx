@@ -1,7 +1,7 @@
 import MessagesList from 'MessagesList'
 import NewMessageForm from 'NewMessageForm'
 import Header from 'Header'
-import { executeCommand, isCommand } from 'helpers/commands'
+import { getCommand } from 'helpers/commands'
 import socketIoClient from 'socket.io-client/dist/socket.io'
 import './Application.sass'
 
@@ -19,22 +19,25 @@ export default class Application extends React.Component {
 
     this.handleMessageInputChange = this.handleMessageInputChange.bind(this)
     this.handleMessageFormSubmit = this.handleMessageFormSubmit.bind(this)
+    this.handleIncomingMessage = this.handleIncomingMessage.bind(this)
     this.addMessage = this.addMessage.bind(this)
 
     this.socket = socketIoClient('/')
   }
 
   componentDidMount () {
-    // setInterval(() => this.socket.emit('message', {
-    //   content: 'fdsfnasfnl klas',
-    //   author: 'Suchy',
-    //   type: 'message'
-    // }), 5000)
-    this.socket.on('message', this.addMessage)
+    this.socket.on('message', this.handleIncomingMessage)
   }
 
   addMessage (message) {
     this.setState({ messages: [...this.state.messages, message] })
+  }
+
+  handleIncomingMessage (message) {
+    if (!message || !message.type) return false;
+
+    ['highlight', 'message', 'think'].includes(message.type) && this.addMessage(message)
+    message.type === 'oops' && this.removeAuthorLastMessage(message.author)
   }
 
   handleMessageInputChange (e) {
@@ -45,10 +48,28 @@ export default class Application extends React.Component {
     e.preventDefault()
 
     const { message, identifier } = this.state
+    const command = getCommand(message)
     const newMessage = { author: identifier, content: message, type: 'message' }
-    // isCommand(message) ? executeCommand(message) : this.addMessage(newMessage)
+
+    if (command) {
+      newMessage.content = command.content
+      newMessage.type = command.type
+    }
+
     this.socket.emit('message', newMessage)
     this.setState({ message: '' })
+  }
+
+  removeAuthorLastMessage (identifier) {
+    const { messages } = this.state
+
+    const reversedMessages = messages.reverse()
+    const index = reversedMessages.findIndex(({ author }) => author === identifier)
+
+    if (index > -1) {
+      reversedMessages.splice(index, 1)
+      this.setState({ messages: reversedMessages.reverse() })
+    }
   }
 
   render () {

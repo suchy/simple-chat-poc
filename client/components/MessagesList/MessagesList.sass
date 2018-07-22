@@ -46,6 +46,20 @@
       left: -6px
       border-right: 6px solid grey
 
-  .is-highlighted &
+  .is-highlight &
     font-size: 18px
-    background: darken(red, 10%)
+
+  .is-self.is-highlight &
+    background: darken(green, 10%)
+
+    &::after
+      border-left-color: darken(green, 10%)
+
+  .is-others.is-highlight &
+    background: darken(grey, 10%)
+
+    &::after
+      border-right-color: darken(grey, 10%)
+
+  .is-think &
+    color: #a9a9a9
