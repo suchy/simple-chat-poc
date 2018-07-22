@@ -35,6 +35,7 @@ export default class Application extends React.Component {
     ['highlight', 'message', 'think'].includes(message.type) && this.addMessage(message)
     message.type === 'oops' && this.removeAuthorLastMessage(message.author)
     message.type === 'fadelast' && this.fadeOut()
+    message.type === 'countdown' && this.countdown(message)
   }
 
   handleMessageInputChange (e) {
@@ -59,6 +60,25 @@ export default class Application extends React.Component {
 
   addMessage (message) {
     this.setState({ messages: [...this.state.messages, message] })
+  }
+
+  countdown (message) {
+    if (message.author === this.state.identifier) return false;
+    const [time, url] = message.content.split(' ')
+
+    if (!time || !url) return false;
+    let count = time
+
+    const countdown = setInterval(() => {
+      this.addMessage({ ...message, type: 'message', content: count.toString() })
+
+      if (count === 0) {
+        clearInterval(countdown)
+        window.open(url)
+      }
+
+      count--
+    }, 1000)
   }
 
   fadeOut () {
