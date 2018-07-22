@@ -5,6 +5,8 @@ import { getCommand } from 'helpers/commands'
 import socketIoClient from 'socket.io-client/dist/socket.io'
 import './Application.sass'
 
+const getTimestamp = () => (new Date()).getTime().toString()
+
 export default class Application extends React.Component {
   constructor (props) {
     super(props)
@@ -63,19 +65,29 @@ export default class Application extends React.Component {
   }
 
   countdown (message) {
-    if (message.author === this.state.identifier) return false;
+    if (message.author === this.state.identifier) {
+      return
+    }
+
     const [time, url] = message.content.split(' ')
 
-    if (!time || !url) return false;
+    if (!time || !url) {
+      return
+    }
+
     let count = time
 
     const countdown = setInterval(() => {
-      this.addMessage({ ...message, type: 'message', content: count.toString() })
+
+      const newMessage = { ...message, type: 'message', content: count.toString(), timestamp: getTimestamp() }
 
       if (count === 0) {
         clearInterval(countdown)
         window.open(url)
+        newMessage.content = `Opening new window and redirecting to ${url}...`
       }
+
+      this.addMessage(newMessage)
 
       count--
     }, 1000)
