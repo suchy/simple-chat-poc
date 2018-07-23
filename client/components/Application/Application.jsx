@@ -52,6 +52,11 @@ export default class Application extends React.Component {
     e.preventDefault()
 
     const { message, userIdentifier } = this.state
+
+    if (!message.replace(/\s/g, '').length) {
+      return
+    }
+
     const command = getCommand(message)
     const newMessage = { author: userIdentifier, content: message, type: 'message' }
 
