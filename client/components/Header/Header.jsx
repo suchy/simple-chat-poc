@@ -2,7 +2,7 @@ import './Header.sass'
 
 const Header = ({ nick }) => (
   <header className='header'>
-    <h1 className='header-title'>Conversation with <span className='header-nick'>{nick}</span></h1>
+    <h1 className='header-title'>{nick}:</h1>
   </header>
 )
 

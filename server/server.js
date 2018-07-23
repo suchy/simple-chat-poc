@@ -13,7 +13,24 @@ const io = socketIo(server)
 
 const getTimestamp = () => (new Date()).getTime().toString()
 
+const clients = {}
+
 io.on('connection', (socket) => {
-  socket.on('message', (message) => io.sockets.emit('message', { ...message, timestamp: getTimestamp() }))
-  socket.on('isWriting', (event) => io.sockets.emit('isWriting', event))
+  const { identifier } = socket.handshake.query
+
+  if (clients[identifier]) {
+    clients[identifier].socket.disconnect()
+    clients[identifier].socket = socket
+  } else {
+    if (Object.values(clients).length < 2) {
+      clients[identifier] = { socket }
+    } else {
+      socket.disconnect()
+    }
+  }
+
+  socket
+    .on('disconnect', () => delete clients[identifier])
+    .on('message', (message) => io.sockets.emit('message', { ...message, timestamp: getTimestamp() }))
+    .on('isWriting', (event) => io.sockets.emit('isWriting', event))
 })

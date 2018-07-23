@@ -1,6 +1,6 @@
 import './NewMessageForm.sass'
 
-const NewMessageForm = ({ message, nick, onChange, onSubmit }) => (
+const NewMessageForm = ({ message, onChange, onSubmit }) => (
   <form onSubmit={onSubmit} className='messages_form'>
     <input
       autoFocus
