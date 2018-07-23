@@ -7,7 +7,8 @@ const app = express()
 const server = http.createServer(app)
 
 app.use(express.static(path.resolve(__dirname, '..', 'public')))
-server.listen(4000, () => console.log('Chat server app listening on port 4000!'))
+const port = process.ENV.PORT || 4000
+server.listen(port, () => console.log(`Chat server app listening on port ${port}!`))
 
 const io = socketIo(server)
 
