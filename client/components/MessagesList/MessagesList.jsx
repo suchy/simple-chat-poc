@@ -19,7 +19,7 @@ class MessagesList extends React.Component {
   }
 
   render () {
-    const { identifier, messages } = this.props
+    const { userIdentifier, messages } = this.props
 
     return (
       <ul className='messages_list' ref={this.listEl}>
@@ -27,10 +27,10 @@ class MessagesList extends React.Component {
           <Message
             author={author}
             content={content}
-            currentUser={identifier}
             key={timestamp}
             timestamp={timestamp}
             type={type}
+            userIdentifier={userIdentifier}
           />
         ))}
       </ul>
@@ -39,7 +39,7 @@ class MessagesList extends React.Component {
 }
 
 MessagesList.propTypes = {
-  identifier: PropTypes.string,
+  userIdentifier: PropTypes.string,
   messages: PropTypes.array
 }
 

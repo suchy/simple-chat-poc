@@ -14,10 +14,10 @@ const mapEmojij = (text) => {
     : `${text} `
 }
 
-const Message = ({ author, content, currentUser, timestamp, type }) => {
+const Message = ({ author, content, timestamp, type, userIdentifier }) => {
   const classNames = [
     'message',
-    author === currentUser ? 'is-self' : 'is-others',
+    author === userIdentifier ? 'is-self' : 'is-others',
     type !== 'message' ? `is-${type}` : ''
   ]
 
@@ -33,9 +33,9 @@ const Message = ({ author, content, currentUser, timestamp, type }) => {
 Message.propTypes = {
   author: PropTypes.string.isRequired,
   content: PropTypes.string.isRequired,
-  currentUser: PropTypes.string.isRequired,
   timestamp: PropTypes.string.isRequired,
-  type: PropTypes.oneOf(['message', 'nick', 'think', 'oops', 'fadelast', 'highlight', 'countdown']).isRequired
+  type: PropTypes.oneOf(['message', 'nick', 'think', 'oops', 'fadelast', 'highlight', 'countdown']).isRequired,
+  userIdentifier: PropTypes.string.isRequired
 }
 
 export default Message

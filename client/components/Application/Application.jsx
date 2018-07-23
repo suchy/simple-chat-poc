@@ -10,14 +10,14 @@ export default class Application extends React.Component {
   constructor (props) {
     super(props)
 
-    const identifier = getIdentifier()
+    const userIdentifier = getIdentifier()
 
     this.state = {
-      identifier,
       isWriting: false,
       message: '',
       messages: [],
-      othersNick: ''
+      othersNick: '',
+      userIdentifier
     }
 
     this.handleMessageInputChange = this.handleMessageInputChange.bind(this)
@@ -25,7 +25,7 @@ export default class Application extends React.Component {
     this.handleIncomingMessage = this.handleIncomingMessage.bind(this)
     this.handleWritingIndicator = this.handleWritingIndicator.bind(this)
 
-    this.socket = socketIoClient('/', { query: { identifier } })
+    this.socket = socketIoClient('/', { query: { userIdentifier } })
   }
 
   componentDidMount () {
@@ -34,8 +34,8 @@ export default class Application extends React.Component {
   }
 
   componentDidUpdate (prevProps, prevState) {
-    const { identifier, message } = this.state
-    !!prevState.message !== !!message && this.socket.emit('isWriting', { identifier, isWriting: !!message })
+    const { userIdentifier, message } = this.state
+    !!prevState.message !== !!message && this.socket.emit('isWriting', { userIdentifier, isWriting: !!message })
   }
 
   handleIncomingMessage (message) {
@@ -51,9 +51,9 @@ export default class Application extends React.Component {
   handleMessageFormSubmit (e) {
     e.preventDefault()
 
-    const { message, identifier } = this.state
+    const { message, userIdentifier } = this.state
     const command = getCommand(message)
-    const newMessage = { author: identifier, content: message, type: 'message' }
+    const newMessage = { author: userIdentifier, content: message, type: 'message' }
 
     if (command) {
       newMessage.content = command.content
@@ -69,8 +69,8 @@ export default class Application extends React.Component {
   }
 
   handleWritingIndicator (e) {
-    const { identifier, isWriting } = this.state
-    e.identifier !== identifier && e.isWriting !== isWriting && this.setState({ isWriting: e.isWriting })
+    const { userIdentifier, isWriting } = this.state
+    e.userIdentifier !== userIdentifier && e.isWriting !== isWriting && this.setState({ isWriting: e.isWriting })
   }
 
   addMessage (message) {
@@ -78,11 +78,11 @@ export default class Application extends React.Component {
   }
 
   changeNick (e) {
-    e.author !== this.state.identifier && this.setState({ othersNick: e.content })
+    e.author !== this.state.userIdentifier && this.setState({ othersNick: e.content })
   }
 
   countdown (message) {
-    if (message.author === this.state.identifier) {
+    if (message.author === this.state.userIdentifier) {
       return
     }
 
@@ -113,18 +113,18 @@ export default class Application extends React.Component {
     this.setState({ messages: fadeOutLastMessage(this.state.messages) })
   }
 
-  removeAuthorLastMessage (identifier) {
-    this.setState({ messages: removeAuthorLastMessage(identifier, this.state.messages) })
+  removeAuthorLastMessage (userIdentifier) {
+    this.setState({ messages: removeAuthorLastMessage(userIdentifier, this.state.messages) })
   }
 
   render () {
-    const { message, messages, identifier, othersNick, isWriting } = this.state
+    const { message, messages, userIdentifier, othersNick, isWriting } = this.state
 
     return (
       <div className='chat'>
         {othersNick && <Header nick={othersNick} />}
 
-        <MessagesList messages={messages} identifier={identifier} />
+        <MessagesList messages={messages} userIdentifier={userIdentifier} />
 
         <Indicator nick={othersNick} isWriting={isWriting} />
 
