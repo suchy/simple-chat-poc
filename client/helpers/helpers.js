@@ -10,6 +10,13 @@ export const fadeOutLastMessage = (messages) => {
   return messages
 }
 
+export const formatTime = (timestamp) => {
+  const date = new Date(parseInt(timestamp, 10))
+  const hours = '0' + date.getHours()
+  const minutes = '0' + date.getMinutes()
+  return `${hours.substr(-2)}:${minutes.substr(-2)}`
+}
+
 export const getCommand = (message) => {
   const [command, ...args] = message.replace('/', '').split(' ')
   return COMMANDS.includes(command) && { type: command, content: args.join(' ') }

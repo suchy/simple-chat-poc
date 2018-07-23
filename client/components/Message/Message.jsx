@@ -1,4 +1,4 @@
-import { getTimestamp } from 'helpers'
+import { formatTime, getTimestamp } from 'helpers'
 import WinkImage from './wink.svg'
 import SmileImage from './smile.svg'
 import './Message.sass'
@@ -24,7 +24,7 @@ const Message = ({ author, content, timestamp, type, userIdentifier }) => {
   const emojiContent = content.split(' ').map(mapEmojij)
 
   return (
-    <li className={classNames.join(' ')} title={timestamp}>
+    <li className={classNames.join(' ')} title={formatTime(timestamp)}>
       <span className='message-body'>{emojiContent}</span>
     </li>
   )
