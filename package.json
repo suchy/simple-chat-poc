@@ -12,6 +12,10 @@
     "lint": "standard --global React PropTypes --verbose | snazzy",
     "postinstall": "npm run build"
   },
+  "engines": {
+    "node": "8.9.4",
+    "npm": "6.2.0"
+  },
   "private": true,
   "repository": {
     "type": "git",
