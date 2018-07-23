@@ -1,5 +1,5 @@
 # Public, build folder
-./public
+public
 
 # Dependency directories
 node_modules/
