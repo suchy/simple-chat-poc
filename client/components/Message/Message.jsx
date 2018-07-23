@@ -1,5 +1,4 @@
 import './Message.sass'
-const emojij = 'http://s3.amazonaws.com/pix.iemoji.com/images/emoji/apple/ios-11/256/winking-face.png'
 import WinkImage from './wink.svg'
 import SmileImage from './smile.svg'
 

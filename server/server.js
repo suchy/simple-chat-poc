@@ -19,11 +19,11 @@ io.on('connection', (socket) => {
   const { identifier } = socket.handshake.query
 
   if (clients[identifier]) {
-    clients[identifier].socket.disconnect()
-    clients[identifier].socket = socket
+    clients[identifier].disconnect()
+    clients[identifier] = socket
   } else {
     if (Object.values(clients).length < 2) {
-      clients[identifier] = { socket }
+      clients[identifier] = socket
     } else {
       socket.disconnect()
     }

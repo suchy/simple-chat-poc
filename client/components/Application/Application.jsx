@@ -2,22 +2,34 @@ import Header from 'Header'
 import MessagesList from 'MessagesList'
 import NewMessageForm from 'NewMessageForm'
 import Indicator from 'Indicator'
+import uuid from 'uuid/v4'
 import { getCommand } from 'helpers/commands'
 import socketIoClient from 'socket.io-client/dist/socket.io'
 import './Application.sass'
 
 const getTimestamp = () => (new Date()).getTime().toString()
 
+const getIdentifier = () => {
+  let identifier = window.localStorage.getItem('identifier')
+
+  if (!identifier) {
+    identifier = uuid()
+    window.localStorage.setItem('identifier', identifier)
+  }
+
+  return identifier
+}
+
 export default class Application extends React.Component {
   constructor (props) {
     super(props)
 
-    const identifier = window.localStorage.getItem('identifier')
+    const identifier = getIdentifier()
 
     this.state = {
       message: '',
       messages: [],
-      identifier: identifier,
+      identifier,
       isWriting: false,
       othersNick: ''
     }
