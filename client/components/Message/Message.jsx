@@ -1,6 +1,7 @@
-import './Message.sass'
+import { getTimestamp } from 'helpers'
 import WinkImage from './wink.svg'
 import SmileImage from './smile.svg'
+import './Message.sass'
 
 const mapEmojij = (text) => {
   const icons = {
@@ -8,7 +9,9 @@ const mapEmojij = (text) => {
     '(smile)': SmileImage
   }
 
-  return icons[text] ? <img src={icons[text]} alt={text} className='emoji' width='24' height='24' /> : `${text} `
+  return icons[text]
+    ? <img src={icons[text]} alt={text} className='emoji' width='24' height='24' key={getTimestamp()} />
+    : `${text} `
 }
 
 const Message = ({ author, content, currentUser, timestamp, type }) => {

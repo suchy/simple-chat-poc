@@ -2,23 +2,9 @@ import Header from 'Header'
 import MessagesList from 'MessagesList'
 import NewMessageForm from 'NewMessageForm'
 import Indicator from 'Indicator'
-import uuid from 'uuid/v4'
-import { getCommand } from 'helpers/commands'
+import { fadeOutLastMessage, getCommand, getIdentifier, getTimestamp, removeAuthorLastMessage } from 'helpers'
 import socketIoClient from 'socket.io-client/dist/socket.io'
 import './Application.sass'
-
-const getTimestamp = () => (new Date()).getTime().toString()
-
-const getIdentifier = () => {
-  let identifier = window.localStorage.getItem('identifier')
-
-  if (!identifier) {
-    identifier = uuid()
-    window.localStorage.setItem('identifier', identifier)
-  }
-
-  return identifier
-}
 
 export default class Application extends React.Component {
   constructor (props) {
@@ -27,10 +13,10 @@ export default class Application extends React.Component {
     const identifier = getIdentifier()
 
     this.state = {
-      message: '',
-      messages: [],
       identifier,
       isWriting: false,
+      message: '',
+      messages: [],
       othersNick: ''
     }
 
@@ -57,7 +43,7 @@ export default class Application extends React.Component {
 
     ['highlight', 'message', 'think'].includes(message.type) && this.addMessage(message)
     message.type === 'oops' && this.removeAuthorLastMessage(message.author)
-    message.type === 'fadelast' && this.fadeOut()
+    message.type === 'fadelast' && this.fadeOutLastMessage()
     message.type === 'countdown' && this.countdown(message)
     message.type === 'nick' && this.changeNick(message)
   }
@@ -123,26 +109,12 @@ export default class Application extends React.Component {
     }, 1000)
   }
 
-  fadeOut () {
-    const { messages } = this.state
-
-    if (messages.length > 0) {
-      messages[messages.length - 1].type = 'fadelast'
-    }
-
-    this.setState({ messages })
+  fadeOutLastMessage () {
+    this.setState({ messages: fadeOutLastMessage(this.state.messages) })
   }
 
   removeAuthorLastMessage (identifier) {
-    const { messages } = this.state
-
-    const reversedMessages = messages.reverse()
-    const index = reversedMessages.findIndex(({ author }) => author === identifier)
-
-    if (index > -1) {
-      reversedMessages.splice(index, 1)
-      this.setState({ messages: reversedMessages.reverse() })
-    }
+    this.setState({ messages: removeAuthorLastMessage(identifier, this.state.messages) })
   }
 
   render () {
