@@ -22,17 +22,17 @@
     width: 0
     height: 0
     position: absolute
-    top: 50%
-    transform: translate(0, -50%)
-    border-top: ($unit / 2) solid transparent
-    border-bottom: ($unit / 2) solid transparent
+    bottom: -7px
+    border-top: 7px solid transparent
+    border-bottom: 7px solid transparent
 
   .is-self &
     background: $green
 
     &::after
       right: - ($unit / 2)
-      border-left: ($unit / 2) solid $green
+      border-left: $unit solid $green
+      transform: rotate(45deg)
 
 
   .is-others &
@@ -40,7 +40,8 @@
 
     &::after
       left: - ($unit / 2)
-      border-right: ($unit / 2) solid $greyLight
+      border-right: $unit solid $greyLight
+      transform: rotate(-45deg)
 
   .is-highlight &
     font-size: $unit * 1.1
