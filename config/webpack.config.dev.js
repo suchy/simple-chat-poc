@@ -6,7 +6,7 @@ const CopyWebpackPlugin = require('copy-webpack-plugin')
 
 module.exports = {
   entry: {
-    index: path.resolve(__dirname, '..', 'client', 'client.js')
+    index: path.resolve(__dirname, '..', 'client', 'client.jsx')
   },
 
   output: {
@@ -64,7 +64,7 @@ module.exports = {
           options: {
             enforce: 'pre',
             parser: 'babel-eslint',
-            global: ['React', 'API_URL', 'PropTypes']
+            global: ['React', 'PropTypes']
           }
         }]
       },

@@ -4,11 +4,14 @@
   "description": "Chat application",
   "main": "./client/index.js",
   "scripts": {
-    "start": "webpack-dev-server --mode development --config ./config/webpack.config.dev.js",
+    "start": "npm run build && npm run start:server",
+    "start:local": "npm run start:server && npm run start:client",
+    "start:server": "node ./server/server.js",
+    "start:client": "webpack-dev-server --mode development --config ./config/webpack.config.dev.js",
     "build": "webpack --config ./config/webpack.config.prod.js --mode production",
     "test": "jest",
     "test:watch": "./node_modules/jest/bin/jest.js --watchAll",
-    "lint": "standard --global react --verbose | snazzy"
+    "lint": "standard --global React PropTypes --verbose | snazzy"
   },
   "private": true,
   "repository": {

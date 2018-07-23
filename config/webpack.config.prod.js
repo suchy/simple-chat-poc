@@ -1,13 +1,13 @@
+const path = require('path')
 const webpack = require('webpack')
 const HtmlWebPackPlugin = require('html-webpack-plugin')
 const DirectoryNamedWebpackPlugin = require('directory-named-webpack-plugin')
 const ExtractTextPlugin = require('extract-text-webpack-plugin')
 const UglifyJSPlugin = require('uglifyjs-webpack-plugin')
 const CopyWebpackPlugin = require('copy-webpack-plugin')
-const path = require('path')
 
 module.exports = {
-  entry: { index: path.resolve(__dirname, '..', 'client', 'index.jsx') },
+  entry: { index: path.resolve(__dirname, '..', 'client', 'client.jsx') },
 
   output: {
     path: path.resolve(__dirname, '..', 'public'),
@@ -22,7 +22,15 @@ module.exports = {
         exclude: /node_modules/,
         use: ExtractTextPlugin.extract({
           fallback: 'style-loader',
-          use: ['css-loader', 'sass-loader']
+          use: [{
+            loader: 'css-loader'
+          }, {
+            loader: 'sass-loader',
+            options: {
+              data: '@import "variables"',
+              includePaths: [path.resolve(__dirname, '..', 'client', 'helpers')]
+            }
+          }]
         })
       },
 
@@ -40,7 +48,7 @@ module.exports = {
           options: {
             enforce: 'pre',
             parser: 'babel-eslint',
-            global: ['React', 'API_URL']
+            global: ['React', 'PropTypes']
           }
         }]
       },
@@ -64,8 +72,8 @@ module.exports = {
 
   resolve: {
     modules: [
-      path.resolve(__dirname, '..', 'app'),
-      path.resolve(__dirname, '..', 'app', 'components'),
+      path.resolve(__dirname, '..', 'client'),
+      path.resolve(__dirname, '..', 'client', 'components'),
       'node_modules'
     ],
     extensions: ['.js', '.jsx'],
@@ -78,7 +86,10 @@ module.exports = {
       filename: 'index.html'
     }),
 
-    new webpack.ProvidePlugin({ React: 'react' }),
+    new webpack.ProvidePlugin({
+      React: 'react',
+      PropTypes: 'prop-types'
+    }),
 
     new ExtractTextPlugin('style.css'),
 
@@ -89,7 +100,7 @@ module.exports = {
     }),
 
     new CopyWebpackPlugin([{
-      from: path.resolve(__dirname, '..', 'app', 'public'),
+      from: path.resolve(__dirname, '..', 'client', 'public'),
       to: path.resolve(__dirname, '..', 'public')
     }])
   ]
