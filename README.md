@@ -1,4 +1,4 @@
-# Chat application
+# Simple chat application - proof of concept
 
 This is simple example of chat application. It's limited to two users only.
 
